@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        h1{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Home</h1>
+    
+    <a href="/user/NewPost">New Post</a>
+    <%for(var post of posts){%>
+        <div class="content">
+        
+        <div class="content-post">
+            <%=post.title%>
+            <%=post.description%>
+            <%=post.user.name%>
+            <%=post.user.email%>
+        </div>
+    </div>
+        <% }%>
+        
+</body>
+</html>
