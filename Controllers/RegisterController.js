@@ -1,4 +1,5 @@
 const bcrypt=require("bcrypt")
+const Joi =require("joi")
 const User=require("../Models/UsersModel")
 const jwt =require("jsonwebtoken")
 
@@ -10,15 +11,22 @@ const RegisterController=async(req,res)=>{
             expiresIn:maxAge
          });
      }
-    const{name,email,password}=req.body;
-    if(!name || !email || !password)
-    {   const Message="All Fields are Required!"
+    const schema={
+        name:Joi.string().min(20).max(50).required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().min(8).max(20).required().pattern(new RegExp("^[a-zA-Z0-9@]{3,30}$"))
+
+    } 
+    const result=Joi.Validate(req.body,schema)
+   // const{name,email,password}=req.body;
+    if(result.error)
+    {   const Message=result.error.details[0].message
         //return res.json({"message":"All fields are required!"})
         res.render("Pages/Register",{Message:Message})
     }
     else{
-        const findUser= await User.findOne({email:email})
-    const username=await User.findOne({name:name})
+        const findUser= await User.findOne({email:req.body.email})
+        const username=await User.findOne({name:req.body.name})
     if(findUser || username){
         const Message="User already Exists. Please Login "
      //return res.json({"Message":"User already exists.Please login"})
